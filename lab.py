@@ -30,17 +30,20 @@ def writeResults(hourlyRate,totalHours,overTimePay):
     myFile = open("payRate.txt","w")
     myFile.write(f"at an hourly rate of {hourlyRate} the {totalHours} worked includes {overTimePay} in overtime pay")
     myFile.close()
-    
+
 def myMainFunction():
-    myHourlyRate = input("Please input the hourly rate of the employee: ")
-    if myHourlyRate.isdigit():
+    myHourlyRate = float(input("Please input the hourly rate of the employee: "))
+    print(type(myHourlyRate))
+    print(type(myHourlyRate) == float)
+
+    if type(myHourlyRate) == float:
         myHoursWorked = collectDailyWorkHours()
         myTotalHours = calculateTotalHours(myHoursWorked)
         myOvertimeHours = calculateOverTime(myTotalHours)
         if myOvertimeHours > 0:
             myOvertimePayRate = calculateOverTimePay(int(myHourlyRate))
             myOvertimePay = myOvertimeHours * myOvertimePayRate
-            myRegularPay = int(myHourlyRate) * 40
+            myRegularPay = myHourlyRate * 40
             myFinalPay = myOvertimePay + myRegularPay
             print(f"Total amount paid for this week is: {myFinalPay}" )
         else:
