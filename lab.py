@@ -29,7 +29,8 @@ def calculateOverTimePay(hourlyRate):
 def writeResults(hourlyRate,totalHours,overTimePay):
     myFile = open("payRate.txt","w")
     myFile.write(f"at an hourly rate of {hourlyRate} the {totalHours} worked includes {overTimePay} in overtime pay")
-
+    myFile.close()
+    
 def myMainFunction():
     myHourlyRate = input("Please input the hourly rate of the employee: ")
     if myHourlyRate.isdigit():
@@ -46,7 +47,6 @@ def myMainFunction():
             print("There isn't any overtime for the employee this week.")
             myRegularPay = int(myHourlyRate) * int(myTotalHours)
             print(f"Total amount paid for this week is: {myRegularPay}")
-        myFile = open("EmployeeHourlyRate.txt","x")
         writeResults(myHourlyRate,myTotalHours,myOvertimePay)
     else:
         print("Hourly rate must be a numerical value, try again!")
