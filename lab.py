@@ -1,12 +1,17 @@
 def collectDailyWorkHours():
     print("Gathering daily hours worked, please input 0 if there wasn't any work done that day.")
     myHours = []
-    for i in range(5):
-        myDailyHours = input("Please input the hours worked: ")
-        if not myDailyHours.isdigit():
-            print("Only numerical inputs accepted")
-        else:
-            myHours.append(myDailyHours)
+    for i in range(5): #Adding a while loop here so user can correct mistakes.
+        while True:
+            try:
+                myDailyHours = float(input(f"Please input the hours worked for day {i+1}: "))
+                if myDailyHours < 0:
+                    print("Hours cannot be negative. Please try again.")
+                else:
+                    myHours.append(myDailyHours)
+                    break
+            except ValueError:
+                print("Only numerical inputs accepted. Please enter a valid number.")
     return myHours
 
 def calculateTotalHours(listOfHours):
@@ -24,7 +29,7 @@ def calculateOverTime(hours):
     return myOverTime
 
 def calculateOverTimePay(hourlyRate):
-     return hourlyRate * 1.5
+    return hourlyRate * 1.5
 
 def writeResults(hourlyRate,totalHours,overTimePay):
     myFile = open("payRate.txt","w")
@@ -32,26 +37,32 @@ def writeResults(hourlyRate,totalHours,overTimePay):
     myFile.close()
 
 def myMainFunction():
-    myHourlyRate = float(input("Please input the hourly rate of the employee: "))
-    print(type(myHourlyRate))
-    print(type(myHourlyRate) == float)
-
-    if type(myHourlyRate) == float:
-        myHoursWorked = collectDailyWorkHours()
-        myTotalHours = calculateTotalHours(myHoursWorked)
-        myOvertimeHours = calculateOverTime(myTotalHours)
-        if myOvertimeHours > 0:
-            myOvertimePayRate = calculateOverTimePay(int(myHourlyRate))
-            myOvertimePay = myOvertimeHours * myOvertimePayRate
-            myRegularPay = myHourlyRate * 40
-            myFinalPay = myOvertimePay + myRegularPay
-            print(f"Total amount paid for this week is: {myFinalPay}" )
-        else:
-            print("There isn't any overtime for the employee this week.")
-            myRegularPay = int(myHourlyRate) * int(myTotalHours)
-            print(f"Total amount paid for this week is: {myRegularPay}")
-        writeResults(myHourlyRate,myTotalHours,myOvertimePay)
+    while True: #Adding a while loop and try to catch user errors. 
+        try:
+            myHourlyRate = float(input("Please input the hourly rate of the employee: "))
+            if myHourlyRate <= 0:
+                print("Hourly rate must be a positive number. Please try again.")
+            else:
+                break
+        except ValueError:
+            print("Hourly rate must be a numerical value. Please try again.")
+    
+    myHoursWorked = collectDailyWorkHours() 
+    myTotalHours = calculateTotalHours(myHoursWorked)
+    myOvertimeHours = calculateOverTime(myTotalHours)
+    
+    if myOvertimeHours > 0:
+        myOvertimePayRate = calculateOverTimePay(int(myHourlyRate))
+        myOvertimePay = myOvertimeHours * myOvertimePayRate
+        myRegularPay = myHourlyRate * 40
+        myFinalPay = myOvertimePay + myRegularPay
     else:
-        print("Hourly rate must be a numerical value, try again!")
-        myMainFunction()    
-myMainFunction()
+        myOvertimePay = 0
+        myFinalPay = myHourlyRate * myTotalHours
+  
+    print(f"Total amount paid for this week is: ${myFinalPay:.2f}")
+
+    writeResults(myHourlyRate, myTotalHours, myOvertimePay)
+
+if __name__ == "__main__":
+    myMainFunction()
